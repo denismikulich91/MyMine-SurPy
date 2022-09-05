@@ -45,10 +45,8 @@ def zoom(sender, app_data):
 transCoords = [0, 1000]
 def move(sender, app_data):
     global transCoords
-    transCoords[1] += 500
-    print(sender)
-    print(app_data)
-    print(dpg.get_mouse_pos())
+    transCoords[0] += app_data[1]/10
+    transCoords[1] += app_data[2]/10
 
 with dpg.handler_registry():
     check = dpg.add_mouse_wheel_handler(callback=zoom)
@@ -69,7 +67,7 @@ dpg.set_primary_window("mainWindow", True)
 while dpg.is_dearpygui_running():
     scale = dpg.create_scale_matrix([axe_scale, axe_scale, axe_scale])
     translation = dpg.create_translation_matrix(transCoords)
-    dpg.apply_transform("root node", scale)
+    dpg.apply_transform("root node", scale * translation)
     dpg.render_dearpygui_frame()
     
 
