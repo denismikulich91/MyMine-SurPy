@@ -1,8 +1,8 @@
-
-from fnmatch import translate
+from msilib import add_data
 import dearpygui.dearpygui as dpg
 from SurPy import*    
 import math
+import MyMineFunctions as mf
 
 dh = DataHandler()
 testList = dh.read_str_file('external data\\teststrings.str')
@@ -38,6 +38,17 @@ def restore_screen_view():
     transCoords = [0, 0]
 
 
+color = [255, 255, 255]
+def choose_color(sender, app_data):
+    global color
+    color = [int(i*255) for i in app_data[:-1]]
+    
+
+def new_line():
+    newLine = mf.MyMineDrawings(color)
+    newLine.draw_polyline()
+
+
 dpg.create_context()
 dpg.configure_app(docking=True)
 
@@ -60,10 +71,11 @@ with dpg.window(tag = 'mainWindow', label="Tutorial", no_scrollbar=True):
 
 with dpg.window(tag = 'toolWindow', label="Tools", pos=[920, 0], min_size=[80,50]):
     dpg.add_button(label='Zoom All', width=70, callback=restore_screen_view)
-    dpg.add_button(label='Draw Line', width=70)
-    dpg.add_button(label='Button3', width=70)
+    dpg.add_button(label='Draw Line', width=70, callback=new_line)
+    dpg.add_button(label='New segment', width=70)
     dpg.add_button(label='Button4', width=70)
     dpg.add_checkbox(label="Visible", callback=toggle_layer2, default_value=True)
+    dpg.add_color_picker(callback=choose_color, default_value=(255, 255, 255))
 
 
 with dpg.handler_registry():
