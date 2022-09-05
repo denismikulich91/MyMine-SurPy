@@ -34,23 +34,29 @@ with dpg.window(tag = 'mainWindow', label="Tutorial"):
                 DataHandler.drawing_depending_on_string_type(string4, color=(100,100,200), thickness=2)
 
 
-axe_scale = 0.3
+axe_scale = 1
 def zoom(sender, app_data):
     global axe_scale
     if app_data == -1:
-        axe_scale -= 0.1
-    else:
         axe_scale += 0.1
+    else:
+        axe_scale -= 0.1
 
-transCoords = [0, 1000]
+transCoords = [0, 0]
 def move(sender, app_data):
     global transCoords
     transCoords[0] += app_data[1]/10
     transCoords[1] += app_data[2]/10
 
+def restore_screen_view():
+    global transCoords, axe_scale
+    axe_scale = 1
+    transCoords = [0, 0]
+
 with dpg.handler_registry():
-    check = dpg.add_mouse_wheel_handler(callback=zoom)
-    check = dpg.add_mouse_drag_handler(callback=move)
+    dpg.add_mouse_wheel_handler(callback=zoom)
+    dpg.add_mouse_drag_handler(callback=move)
+    dpg.add_mouse_double_click_handler(button=2, callback=restore_screen_view)
 
 
 scale = dpg.create_scale_matrix([axe_scale, axe_scale, axe_scale])
